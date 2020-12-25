@@ -143,6 +143,7 @@ COMMONOBJS    = array.$(OBJEXT) \
 		transient_heap.$(OBJEXT) \
 		util.$(OBJEXT) \
 		variable.$(OBJEXT) \
+		ext/zlib/zlib.$(OBJEXT) \
 		version.$(OBJEXT) \
 		vm.$(OBJEXT) \
 		vm_backtrace.$(OBJEXT) \

@@ -4253,7 +4253,8 @@ vm_check_if_class(ID id, rb_num_t flags, VALUE super, VALUE klass)
     else if (VM_DEFINECLASS_HAS_SUPERCLASS_P(flags)) {
 	VALUE tmp = rb_class_real(RCLASS_SUPER(klass));
 
-	if (tmp != super) {
+    // Edited for RPG Maker compatibility
+	if (0) { //if (tmp != super) {
 	    rb_raise(rb_eTypeError,
 		     "superclass mismatch for class %"PRIsVALUE"",
 		     rb_id2str(id));

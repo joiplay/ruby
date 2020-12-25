@@ -931,11 +931,14 @@ rb_str_format(int argc, const VALUE *argv, VALUE fmt)
     rb_str_tmp_frozen_release(orig, fmt);
     /* XXX - We cannot validate the number of arguments if (digit)$ style used.
      */
+	 // Edited for RPG Maker compatibility
+#if 0
     if (posarg >= 0 && nextarg < argc) {
 	const char *mesg = "too many arguments for format string";
 	if (RTEST(ruby_debug)) rb_raise(rb_eArgError, "%s", mesg);
 	if (RTEST(ruby_verbose)) rb_warn("%s", mesg);
     }
+#endif
     rb_str_resize(result, blen);
 
     return result;
