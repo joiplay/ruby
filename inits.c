@@ -17,6 +17,9 @@ static void Init_builtin_prelude(void);
 
 #define CALL(n) {void Init_##n(void); Init_##n();}
 
+void rb_call_builtin_inits();
+void Init_ext();
+
 void
 rb_call_inits(void)
 {
@@ -80,6 +83,8 @@ rb_call_inits(void)
 
     // enable builtin loading
     CALL(builtin);
+    rb_call_builtin_inits();
+    CALL(ext);
 }
 
 void
