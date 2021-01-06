@@ -16,7 +16,7 @@
 #define TIME_QUANTUM_USEC (10 * 1000)
 #define RB_CONDATTR_CLOCK_MONOTONIC 1 /* no effect */
 
-#undef Sleep
+//#undef Sleep
 
 #define native_thread_yield() Sleep(0)
 #define unregister_ubf_list(th)

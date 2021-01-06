@@ -157,7 +157,7 @@ typedef int clockid_t;
 #define getpid()		rb_w32_getpid()
 #define getppid()		rb_w32_getppid()
 #define sleep(x)		rb_w32_Sleep((x)*1000)
-#define Sleep(msec)		(void)rb_w32_Sleep(msec)
+#define RB_Sleep(msec)		(void)rb_w32_Sleep(msec)
 
 #undef execv
 #define execv(path,argv)	rb_w32_uaspawn(P_OVERLAY,path,argv)

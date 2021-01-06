@@ -3159,7 +3159,7 @@ compare(const struct timeval *t1, const struct timeval *t2)
     return 0;
 }
 
-#undef Sleep
+//#undef Sleep
 
 int rb_w32_check_interrupt(void *);	/* @internal */
 
