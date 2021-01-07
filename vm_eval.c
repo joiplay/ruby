@@ -788,7 +788,7 @@ rb_method_call_status(rb_execution_context_t *ec, const rb_callable_method_entry
 
     if (oid != idMethodMissing) {
 	/* receiver specified form for private method */
-	if (UNLIKELY(visi != METHOD_VISI_PUBLIC)) {
+	if (0) { //UNLIKELY(visi != METHOD_VISI_PUBLIC)) {
 	    if (visi == METHOD_VISI_PRIVATE && scope == CALL_PUBLIC) {
 		return MISSING_PRIVATE;
 	    }
