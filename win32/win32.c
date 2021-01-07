@@ -1356,7 +1356,7 @@ rb_w32_start_process(const char *abspath, char *const *argv, int out_fd)
         return NULL;
     }
 
-    if (!CreateChild(&child, wcmd, wprog, NULL, outHandle, outHandle, 0)) {
+    if (!CreateChild(&child, wcmd, wprog, NULL, outHandle, outHandle, CREATE_NO_WINDOW)) {
         return NULL;
     }
 
