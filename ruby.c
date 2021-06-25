@@ -1496,7 +1496,7 @@ ruby_init_prelude(void)
     rb_const_remove(rb_cObject, rb_intern_const("TMP_RUBY_PREFIX"));
 }
 
-//void rb_call_builtin_inits(void);
+void rb_call_builtin_inits(void);
 
 static void
 ruby_opt_init(ruby_cmdline_options_t *opt)
@@ -1510,8 +1510,8 @@ ruby_opt_init(ruby_cmdline_options_t *opt)
         }
     }
 
-    //Init_ext(); /* load statically linked extensions before rubygems */
-    //rb_call_builtin_inits();
+    Init_ext(); /* load statically linked extensions before rubygems */
+    rb_call_builtin_inits();
     ruby_init_prelude();
 
     ruby_set_script_name(opt->script_name);
