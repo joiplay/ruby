@@ -1171,7 +1171,7 @@ static VALUE trace_func = 0;
 static int tracing = 0;
 static void call_trace_func _((rb_event_t,NODE*,VALUE,ID,VALUE));
 
-#if 0
+#if 1
 #define SET_CURRENT_SOURCE() (ruby_sourcefile = ruby_current_node->nd_file, \
 			      ruby_sourceline = nd_line(ruby_current_node))
 #else
@@ -1335,8 +1335,8 @@ error_print()
         int truncate = eclass == rb_eSysStackError;
 
 #define TRACE_MAX (TRACE_HEAD+TRACE_TAIL+5)
-#define TRACE_HEAD 8
-#define TRACE_TAIL 5
+#define TRACE_HEAD 100
+#define TRACE_TAIL 100
 
 	ep = RARRAY(errat);
 	for (i=1; i<ep->len; i++) {
@@ -4076,8 +4076,7 @@ rb_eval(self, n)
 		if (super) {
 		    tmp = rb_class_real(RCLASS(klass)->super);
 		    if (tmp != super) {
-			rb_raise(rb_eTypeError, "superclass mismatch for class %s",
-				 rb_id2name(cname));
+			goto override_class;
 		    }
 		    super = 0;
 		}
@@ -4086,6 +4085,7 @@ rb_eval(self, n)
 		}
 	    }
 	    else {
+            override_class:
 		if (!super) super = rb_cObject;
 		klass = rb_define_class_id(cname, super);
 		rb_set_class_path(klass, cbase, rb_id2name(cname));
@@ -12484,6 +12484,11 @@ rb_thread_start_0(fn, arg, th)
 	th->priority = curr_thread->priority;
 	th->thgroup = curr_thread->thgroup;
     }
+#if defined(HAVE_SETITIMER) || defined(_THREAD_SAFE)
+        if (!thread_init) {
+            rb_thread_start_timer();
+        }
+#endif
     START_TIMER();
 
     PUSH_TAG(PROT_THREAD);
@@ -13211,7 +13216,9 @@ rb_thread_atfork()
     main_thread = curr_thread;
     curr_thread->next = curr_thread;
     curr_thread->prev = curr_thread;
-    STOP_TIMER();
+#if defined(HAVE_SETITIMER) || defined(_THREAD_SAFE)
+    rb_thread_stop_timer();
+#endif
 }
 
 

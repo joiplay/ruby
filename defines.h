@@ -193,7 +193,10 @@ void xfree _((void*));
 #if defined(__BEOS__)
 #include <net/socket.h> /* intern.h needs fd_set definition */
 #endif
-
+#if defined(__ANDROID__)
+#include <sys/select.h> /* intern.h needs fd_set definition */
+#define CharNext(p) ((p) + 1)
+#endif
 #ifdef RUBY_EXPORT
 #undef RUBY_EXTERN
 #endif

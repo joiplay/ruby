@@ -46,7 +46,7 @@ str_mod_check(s, p, len)
     long len;
 {
     if (RSTRING(s)->ptr != p || RSTRING(s)->len != len) {
-	rb_raise(rb_eRuntimeError, "string modified");
+	//rb_raise(rb_eRuntimeError, "string modified");
     }
 }
 
@@ -55,7 +55,7 @@ str_frozen_check(s)
     VALUE s;
 {
     if (OBJ_FROZEN(s)) {
-	rb_raise(rb_eRuntimeError, "string frozen");
+	//rb_raise(rb_eRuntimeError, "string frozen");
     }
 }
 
@@ -1328,7 +1328,9 @@ rb_str_match(x, y)
 {
     switch (TYPE(y)) {
       case T_STRING:
-	rb_raise(rb_eTypeError, "type mismatch: String given");
+      //Return nil instead of throwing exception
+	//rb_raise(rb_eTypeError, "type mismatch: String given");
+    return Qnil;
 
       case T_REGEXP:
 	return rb_reg_match(y, x);

@@ -8,6 +8,7 @@
   created at: Sat May 11 23:46:03 JST 2002
 
 ************************************************/
+#include <ruby/config.h>
 
 #ifndef MISSING_H
 #define MISSING_H

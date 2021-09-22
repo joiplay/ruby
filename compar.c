@@ -21,7 +21,7 @@ rb_cmpint(val, a, b)
     VALUE val, a, b;
 {
     if (NIL_P(val)) {
-	rb_cmperr(a, b);
+	return -1;
     }
     if (FIXNUM_P(val)) return FIX2INT(val);
     if (TYPE(val) == T_BIGNUM) {

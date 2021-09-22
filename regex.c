@@ -1600,7 +1600,7 @@ re_compile_pattern(pattern, size, bufp)
 	  case 'C':
 	  case 'c':
 	    {
-	      const char *pp;
+	      char *pp;
 
 	      --p;
 	      c = read_special(p, pend, &pp);
@@ -1727,7 +1727,7 @@ re_compile_pattern(pattern, size, bufp)
 	  goto range_retry;
 	}
 	else {
-	  if (TRANSLATE_P() && c < 0x100) c = (unsigned char)translate[c];
+	  if (TRANSLATE_P()) c = (unsigned char)translate[c];
 	  if (had_mbchar == 0 && (!current_mbctype || !had_num_literal)) {
 	    SET_LIST_BIT(c);
 	    had_num_literal = 0;
@@ -1747,7 +1747,6 @@ re_compile_pattern(pattern, size, bufp)
 	memmove(&b[(unsigned char)b[-1]], &b[(1 << BYTEWIDTH) / BYTEWIDTH],
 		2 + EXTRACT_UNSIGNED(&b[(1 << BYTEWIDTH) / BYTEWIDTH])*8);
       b += b[-1] + 2 + EXTRACT_UNSIGNED(&b[(unsigned char)b[-1]])*8;
-      had_num_literal = 0;
       break;
 
     case '(':
@@ -1831,7 +1830,8 @@ re_compile_pattern(pattern, size, bufp)
 	    break;
 
 	  default:
-	    FREE_AND_RETURN(stackb, "undefined (?...) sequence");
+	    //FREE_AND_RETURN(stackb, "undefined (?...) sequence");
+        break;
 	  }
 	}
 	else {
@@ -2028,14 +2028,16 @@ re_compile_pattern(pattern, size, bufp)
     case '{':
       /* If there is no previous pattern, this is an invalid pattern.  */
       if (!laststart) {
-	snprintf(error_msg, ERROR_MSG_MAX_SIZE, 
-		 "invalid regular expression; there's no previous pattern, to which '{' would define cardinality at %d", 
-		 p-pattern);
-	FREE_AND_RETURN(stackb, error_msg);
+	//snprintf(error_msg, ERROR_MSG_MAX_SIZE, 
+	//	 "invalid regular expression; there's no previous pattern, to which '{' would define cardinality at %d", 
+	//	 p-pattern);
+	//FREE_AND_RETURN(stackb, error_msg);
+      goto normal_char;
       }
       if( p == pend)
-	FREE_AND_RETURN(stackb, "invalid regular expression; '{' can't be last character" );
-
+	//FREE_AND_RETURN(stackb, "invalid regular expression; '{' can't be last character" );
+      goto normal_char;
+      
       beg_interval = p - 1;
 
       lower_bound = -1;			/* So can see if are set.  */
@@ -2152,12 +2154,6 @@ re_compile_pattern(pattern, size, bufp)
 	   more at the end of the loop.  */
 	unsigned nbytes = upper_bound == 1 ? 10 : 20;
 
-	if (lower_bound == 0 && greedy == 0) {
-	    GET_BUFFER_SPACE(3);
-	    insert_jump(try_next, laststart, b + 3, b);
-	    b += 3;
-	}
-
 	GET_BUFFER_SPACE(nbytes);
 	/* Initialize lower bound of the `succeed_n', even
 	   though it will be set during matching by its
@@ -2211,7 +2207,6 @@ re_compile_pattern(pattern, size, bufp)
 
     unfetch_interval:
       /* If an invalid interval, match the characters as literals.  */
-      re_warning("regexp has invalid interval");
       p = beg_interval;
       beg_interval = 0;
 
@@ -2394,8 +2389,6 @@ re_compile_pattern(pattern, size, bufp)
     default:
       if (c == ']')
         re_warning("regexp has `]' without escape");
-      else if (c == '}')
-        re_warning("regexp has `}' without escape");
     normal_char:		/* Expects the character in `c'.  */
       had_mbchar = 0;
       if (ismbchar(c)) {
