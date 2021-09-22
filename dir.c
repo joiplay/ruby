@@ -702,8 +702,12 @@ dir_seek(VALUE dir, VALUE pos)
 static VALUE
 dir_set_pos(VALUE dir, VALUE pos)
 {
+#ifdef HAVE_SEEKDIR
     dir_seek(dir, pos);
     return pos;
+#else
+	rb_notimplement();
+#endif
 }
 
 /*

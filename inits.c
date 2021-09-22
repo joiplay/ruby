@@ -59,5 +59,9 @@ rb_call_inits(void)
     CALL(Rational);
     CALL(Complex);
     CALL(version);
+	CALL(zlib);
+    CALL(dl);
+    CALL(fiber);
+    CALL(nkf);
 }
 #undef CALL

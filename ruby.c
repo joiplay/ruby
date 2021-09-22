@@ -697,6 +697,15 @@ proc_options(long argc, char **argv, struct cmdline_options *opt, int envopt)
     long n, argc0 = argc;
     const char *s;
 
+	const char *enc_name = 0;
+	enc_name = "UTF-8";
+		    
+	if (enc_name) {
+		opt->src.enc.name = rb_str_new2(enc_name);
+		if (!opt->ext.enc.name)
+			opt->ext.enc.name = opt->src.enc.name;
+	}
+	
     if (argc == 0)
 	return 0;
 
@@ -1269,6 +1278,16 @@ process_options(int argc, char **argv, struct cmdline_options *opt)
 	if (int_enc_name)
 	    opt->intern.enc.name = int_enc_name;
     }
+	
+	const char *enc_name = 0;
+	enc_name = "UTF-8";
+		    
+	if (enc_name) {
+		opt->src.enc.name = rb_str_new2(enc_name);
+		opt->ext.enc.name = opt->src.enc.name;
+		opt->intern.enc.name = opt->src.enc.name;
+	}
+	
 
     if (opt->dump & DUMP_BIT(version)) {
 	ruby_show_version();

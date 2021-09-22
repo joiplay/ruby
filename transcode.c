@@ -2260,7 +2260,8 @@ transcode_loop(const unsigned char **in_pos, unsigned char **out_pos,
 
     ec = rb_econv_open_opts(src_encoding, dst_encoding, ecflags, ecopts);
     if (!ec)
-        rb_exc_raise(rb_econv_open_exc(src_encoding, dst_encoding, ecflags));
+        return;
+        //rb_exc_raise(rb_econv_open_exc(src_encoding, dst_encoding, ecflags));
 
     if (!NIL_P(ecopts) && TYPE(ecopts) == T_HASH)
 	fallback = rb_hash_aref(ecopts, sym_fallback);
@@ -2325,7 +2326,8 @@ transcode_loop(const unsigned char **in_pos, unsigned char **out_pos,
 
     ec = rb_econv_open_opts(src_encoding, dst_encoding, ecflags, ecopts);
     if (!ec)
-        rb_exc_raise(rb_econv_open_exc(src_encoding, dst_encoding, ecflags));
+        return;
+        //rb_exc_raise(rb_econv_open_exc(src_encoding, dst_encoding, ecflags));
 
     last_tc = ec->last_tc;
     max_output = last_tc ? last_tc->transcoder->max_output : 1;
@@ -3053,10 +3055,12 @@ econv_s_search_convpath(int argc, VALUE *argv, VALUE klass)
     transcode_search_path(sname, dname, search_convpath_i, &convpath);
 
     if (NIL_P(convpath))
-        rb_exc_raise(rb_econv_open_exc(sname, dname, ecflags));
+        return convpath;
+        //rb_exc_raise(rb_econv_open_exc(sname, dname, ecflags));
 
     if (decorate_convpath(convpath, ecflags) == -1)
-        rb_exc_raise(rb_econv_open_exc(sname, dname, ecflags));
+        return convpath;
+        //rb_exc_raise(rb_econv_open_exc(sname, dname, ecflags));
 
     return convpath;
 }
@@ -3293,7 +3297,8 @@ econv_init(int argc, VALUE *argv, VALUE self)
     }
 
     if (!ec) {
-        rb_exc_raise(rb_econv_open_exc(sname, dname, ecflags));
+        return self;
+        //rb_exc_raise(rb_econv_open_exc(sname, dname, ecflags));
     }
 
     if (!DECORATOR_P(sname, dname)) {

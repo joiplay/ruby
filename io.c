@@ -120,6 +120,27 @@ extern void Init_File(void);
 #define open	rb_w32_uopen
 #endif
 
+char *
+path_normalize(const char *path) {
+  if (!path) return NULL;
+
+  char* copy = strdup(path);
+  if (NULL == copy) return NULL;
+  char *ptr = copy;
+
+  for (int i = 0; copy[i]; i++) {
+    if('\\' == path[i]){
+      *ptr++ = '/';
+    } else {
+      *ptr++ = path[i];
+    }
+  }
+
+  *ptr = '\0';
+
+  return copy;
+}
+
 VALUE rb_cIO;
 VALUE rb_eEOFError;
 VALUE rb_eIOError;
@@ -2995,8 +3016,8 @@ rb_io_each_codepoint(VALUE io)
 		}
 	    }
 	    if (MBCLEN_INVALID_P(r)) {
-		rb_raise(rb_eArgError, "invalid byte sequence in %s",
-			 rb_enc_name(fptr->encs.enc));
+            //Do not raise eArgError
+		//rb_raise(rb_eArgError, "invalid byte sequence in %s", rb_enc_name(fptr->encs.enc));
 	    }
 	    n = MBCLEN_CHARFOUND_LEN(r);
 	    if (fptr->encs.enc) {
@@ -3028,7 +3049,8 @@ rb_io_each_codepoint(VALUE io)
 	    rb_yield(UINT2NUM(c));
 	}
 	else if (MBCLEN_INVALID_P(r)) {
-	    rb_raise(rb_eArgError, "invalid byte sequence in %s", rb_enc_name(enc));
+        //Do not raise eArgError
+	    //rb_raise(rb_eArgError, "invalid byte sequence in %s", rb_enc_name(enc));
 	}
 	else {
 	    continue;
@@ -4522,7 +4544,8 @@ sysopen_func(void *ptr)
 {
     const struct sysopen_struct *data = ptr;
     const char *fname = RSTRING_PTR(data->fname);
-    return (VALUE)open(fname, data->oflags, data->perm);
+    const char *nfname = path_normalize(fname);
+    return (VALUE)open(nfname, data->oflags, data->perm);
 }
 
 static inline int
@@ -4747,7 +4770,8 @@ rb_file_open_str(VALUE fname, const char *modestr)
 VALUE
 rb_file_open(const char *fname, const char *modestr)
 {
-    return rb_file_open_internal(io_alloc(rb_cFile), rb_str_new_cstr(fname), modestr);
+    const char *nfname = path_normalize(fname);
+    return rb_file_open_internal(io_alloc(rb_cFile), rb_str_new_cstr(nfname), modestr);
 }
 
 #if defined(__CYGWIN__) || !defined(HAVE_FORK)

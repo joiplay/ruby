@@ -510,10 +510,10 @@ rb_str_format(int argc, const VALUE *argv, VALUE fmt)
       retry:
 	switch (*p) {
 	  default:
-	    if (rb_enc_isprint(*p, enc))
-		rb_raise(rb_eArgError, "malformed format string - %%%c", *p);
-	    else
-		rb_raise(rb_eArgError, "malformed format string");
+	    //if (rb_enc_isprint(*p, enc))
+		//rb_raise(rb_eArgError, "malformed format string - %%%c", *p);
+	    //else
+		//rb_raise(rb_eArgError, "malformed format string");
 	    break;
 
 	  case ' ':
@@ -1070,11 +1070,12 @@ rb_str_format(int argc, const VALUE *argv, VALUE fmt)
   sprint_exit:
     /* XXX - We cannot validate the number of arguments if (digit)$ style used.
      */
-    if (posarg >= 0 && nextarg < argc) {
-	const char *mesg = "too many arguments for format string";
-	if (RTEST(ruby_debug)) rb_raise(rb_eArgError, "%s", mesg);
-	if (RTEST(ruby_verbose)) rb_warn("%s", mesg);
-    }
+    //Disable argc check for 1.8.1 compatibility
+    //if (posarg >= 0 && nextarg < argc) {
+	//const char *mesg = "too many arguments for format string";
+	//if (RTEST(ruby_debug)) rb_raise(rb_eArgError, "%s", mesg);
+	//if (RTEST(ruby_verbose)) rb_warn("%s", mesg);
+    //}
     rb_str_resize(result, blen);
 
     if (tainted) OBJ_TAINT(result);

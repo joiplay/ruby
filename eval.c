@@ -1137,7 +1137,7 @@ Init_eval(void)
 
     rb_define_private_method(rb_cModule, "append_features", rb_mod_append_features, 1);
     rb_define_private_method(rb_cModule, "extend_object", rb_mod_extend_object, 1);
-    rb_define_private_method(rb_cModule, "include", rb_mod_include, -1);
+    rb_define_method(rb_cModule, "include", rb_mod_include, -1);
 
     rb_undef_method(rb_cClass, "module_function");
 

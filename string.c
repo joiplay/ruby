@@ -346,7 +346,7 @@ static inline void
 str_mod_check(VALUE s, const char *p, long len)
 {
     if (RSTRING_PTR(s) != p || RSTRING_LEN(s) != len){
-	rb_raise(rb_eRuntimeError, "string modified");
+	//rb_raise(rb_eRuntimeError, "string modified");
     }
 }
 
@@ -1868,9 +1868,8 @@ rb_enc_cr_str_buf_cat(VALUE str, const char *ptr, long len,
         str_cr != ENC_CODERANGE_7BIT &&
         ptr_cr != ENC_CODERANGE_7BIT) {
       incompatible:
-        rb_raise(rb_eEncCompatError, "incompatible character encodings: %s and %s",
-            rb_enc_name(rb_enc_from_index(str_encindex)),
-            rb_enc_name(rb_enc_from_index(ptr_encindex)));
+        //rb_raise(rb_eEncCompatError, "incompatible character encodings: %s and %s", rb_enc_name(rb_enc_from_index(str_encindex)),rb_enc_name(rb_enc_from_index(ptr_encindex)));
+        return str;
     }
 
     if (str_cr == ENC_CODERANGE_UNKNOWN) {
@@ -2550,7 +2549,9 @@ rb_str_match(VALUE x, VALUE y)
 {
     switch (TYPE(y)) {
       case T_STRING:
-	rb_raise(rb_eTypeError, "type mismatch: String given");
+	//Return nil instead of throwing exception
+	//rb_raise(rb_eTypeError, "type mismatch: String given");
+    return Qnil;
 
       case T_REGEXP:
 	return rb_reg_match(y, x);
@@ -3516,9 +3517,8 @@ rb_str_sub_bang(int argc, VALUE *argv, VALUE str)
 	    p = RSTRING_PTR(str); len = RSTRING_LEN(str);
 	    if (coderange_scan(p, beg0, str_enc) != ENC_CODERANGE_7BIT ||
 		coderange_scan(p+end0, len-end0, str_enc) != ENC_CODERANGE_7BIT) {
-                rb_raise(rb_eEncCompatError, "incompatible character encodings: %s and %s",
-			 rb_enc_name(str_enc),
-			 rb_enc_name(STR_ENC_GET(repl)));
+                //rb_raise(rb_eEncCompatError, "incompatible character encodings: %s and %s", rb_enc_name(str_enc), rb_enc_name(STR_ENC_GET(repl)));
+                return str;
             }
             enc = STR_ENC_GET(repl);
         }
@@ -4388,8 +4388,7 @@ static void
 rb_str_check_dummy_enc(rb_encoding *enc)
 {
     if (rb_enc_dummy_p(enc)) {
-	rb_raise(rb_eEncCompatError, "incompatible encoding with this operation: %s",
-		 rb_enc_name(enc));
+	rb_raise(rb_eEncCompatError, "incompatible encoding with this operation: %s",		 rb_enc_name(enc));
     }
 }
 

@@ -714,10 +714,8 @@ rb_encoding*
 rb_enc_check(VALUE str1, VALUE str2)
 {
     rb_encoding *enc = rb_enc_compatible(str1, str2);
-    if (!enc)
-	rb_raise(rb_eEncCompatError, "incompatible character encodings: %s and %s",
-		 rb_enc_name(rb_enc_get(str1)),
-		 rb_enc_name(rb_enc_get(str2)));
+    //if (!enc)
+	//rb_raise(rb_eEncCompatError, "incompatible character encodings: %s and %s", rb_enc_name(rb_enc_get(str1)), rb_enc_name(rb_enc_get(str2)));
     return enc;
 }
 
@@ -871,8 +869,10 @@ rb_enc_codepoint_len(const char *p, const char *e, int *len_p, rb_encoding *enc)
 	if (len_p) *len_p = MBCLEN_CHARFOUND_LEN(r);
         return rb_enc_mbc_to_codepoint(p, e, enc);
     }
-    else
-	rb_raise(rb_eArgError, "invalid byte sequence in %s", rb_enc_name(enc));
+    //Do not raise eArgError
+    //else
+        
+	//rb_raise(rb_eArgError, "invalid byte sequence in %s", rb_enc_name(enc));
 }
 
 #undef rb_enc_codepoint

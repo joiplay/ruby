@@ -214,7 +214,11 @@ int rb_vm_get_sourceline(const rb_control_frame_t *);
 void rb_trap_restore_mask(void);
 
 #ifndef CharNext		/* defined as CharNext[AW] on Windows. */
+#ifdef __ANDROID__
+#define CharNext(p) ((p) + 1)
+#else
 #define CharNext(p) ((p) + mblen(p, RUBY_MBCHAR_MAXSIZE))
+#endif
 #endif
 
 #if defined DOSISH || defined __CYGWIN__

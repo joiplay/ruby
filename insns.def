@@ -912,14 +912,16 @@ defineclass
 		VALUE tmp;
 		tmp = rb_class_real(RCLASS_SUPER(klass));
 
+        //Allow superclass mismatch for 1.8.1 compatibility
 		if (tmp != super) {
-		    rb_raise(rb_eTypeError, "superclass mismatch for class %s",
-			     rb_id2name(id));
+		    //rb_raise(rb_eTypeError, "superclass mismatch for class %s", rb_id2name(id));
+            goto override_class;
 		}
 	    }
 	}
 	else {
 	    /* new class declaration */
+            override_class:
 	    klass = rb_define_class_id(id, super);
 	    rb_set_class_path_string(klass, cbase, rb_id2str(id));
 	    rb_const_set(cbase, id, klass);

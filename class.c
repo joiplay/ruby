@@ -447,14 +447,17 @@ rb_define_class(const char *name, VALUE super)
 	if (TYPE(klass) != T_CLASS) {
 	    rb_raise(rb_eTypeError, "%s is not a class", name);
 	}
+    //Allow superclass mismatch for 1.8.1 compatibility
 	if (rb_class_real(RCLASS_SUPER(klass)) != super) {
-	    rb_raise(rb_eTypeError, "superclass mismatch for class %s", name);
+	//    rb_raise(rb_eTypeError, "superclass mismatch for class %s", name);
+        goto override_class;
 	}
 	return klass;
     }
     if (!super) {
 	rb_warn("no super class for `%s', Object assumed", name);
     }
+        override_class:
     klass = rb_define_class_id(id, super);
     st_add_direct(rb_class_tbl, id, klass);
     rb_name_class(klass, id);
